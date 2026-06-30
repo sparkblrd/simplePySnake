@@ -9,6 +9,7 @@ apple = randrange(0, RES, SIZE), randrange(0, RES, SIZE)
 lenght = 1
 snake = [(x,y)]
 dx, dy = 0, 0
+next_dx, next_dy = 0, 0
 fps = 5
 
 pygame.init()
@@ -30,13 +31,3 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
-
-    key = pygame.key.get_pressed()
-    if key[pygame.K_w]:
-        dx, dy = 0, -1
-    if key[pygame.K_s]:
-        dx, dy = 0, 1
-    if key[pygame.K_a]:
-        dx, dy = -1, 0
-    if key[pygame.K_d]:
-        dx, dy = 1, 0
