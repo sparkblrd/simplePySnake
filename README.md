@@ -6,18 +6,42 @@ The project is built for practicing game development, reinforcement learning, an
 
 Features
 Classic Snake gameplay
+
 AI-controlled snake
+
 Reinforcement learning logic
+
 Score tracking
+
 Windows executable available in Releases
+
 Tech Stack
+
 Python
+
 PyGame
+
 PyTorch
+
 AI
+
 Reinforcement Learning
 
+Tech Stack
+
+Python
+
+PyGame
+
+PyTorch
+
+AI
+
+Reinforcement Learning
+
+
 Install dependencies:
+
 pip install -r requirements.txt
 
 Run the project:
