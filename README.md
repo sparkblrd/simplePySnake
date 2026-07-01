@@ -19,8 +19,11 @@ Reinforcement Learning
 
 Install dependencies:
 pip install -r requirements.txt
+
 Run the project:
+
 python agent.py
+
 Release
 
 Hotkeys:
