@@ -1,7 +1,7 @@
 import random
-from turtle import done
 import torch
 from collections import deque
+
 from model import LinearQNet, QTrainer
 from game import SnakeGameAI, SIZE
 
@@ -25,6 +25,16 @@ class Agent:
     def train_short_memory(self, state, action, reward, next_state, done):
         self.trainer.train_step(state, action, reward, next_state, done)
 
+    def train_long_memory(self):
+        if len(self.memory) > BATCH_SIZE:
+            mini_sample = random.sample(self.memory, BATCH_SIZE)
+        else:
+            mini_sample = self.memory
+
+        states, actions, rewards, next_states, dones = zip(*mini_sample)
+
+        self.trainer.train_step(states, actions, rewards, next_states, dones)
+    
     def get_state(self, game):
         head_x, head_y = game.snake[-1]
         
@@ -94,8 +104,8 @@ def train():
     agent = Agent()
 
     while True:
-
         state_old = agent.get_state(game)
+
         final_move = agent.get_action(state_old)
 
         reward, done, score = game.playStep(final_move)
@@ -103,21 +113,16 @@ def train():
         state_new = agent.get_state(game)
 
         agent.train_short_memory(state_old, final_move, reward, state_new, done)
+
         agent.remember(state_old, final_move, reward, state_new, done)
 
-        agent.trainer.train_step(
-            state_old,
-            final_move,
-            reward,
-            state_new,
-            done
-        )
-
         if done:
+            agent.train_long_memory()
+
             game.reset()
             agent.n_games += 1
-            print("Game:", agent.n_games, "Score:", score)
 
+            print("Game:", agent.n_games, "Score:", score)
 
 if __name__ == "__main__":
     train()

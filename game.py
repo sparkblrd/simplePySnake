@@ -5,6 +5,7 @@ CELL_NUMBER = 16
 SIZE = 10
 RES = CELL_NUMBER * SIZE
 
+
 class SnakeGameAI:
     def __init__(self):
         pygame.init()
@@ -20,42 +21,62 @@ class SnakeGameAI:
             )
             if apple not in snake:
                 return apple
-            
+
     def reset(self):
         self.direction = "RIGHT"
-        self.x, self.y = randrange(0, RES, SIZE), randrange(0, RES, SIZE)
+        self.x = randrange(0, RES, SIZE)
+        self.y = randrange(0, RES, SIZE)
+
         self.snake = [(self.x, self.y)]
         self.length = 1
         self.score = 0
+
         self.apple = self.spawnApple(self.snake)
         self.game_over = False
-    
+
+        self.frame_iteration = 0
+
     def playStep(self, action):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        
+
+        self.frame_iteration += 1
+
         reward = 0
+
+        old_distance = abs(self.x - self.apple[0]) + abs(self.y - self.apple[1])
+
         self.move(action)
+
+        new_distance = abs(self.x - self.apple[0]) + abs(self.y - self.apple[1])
+
+        if new_distance < old_distance:
+            reward = 1
+        else:
+            reward = -1
+
         self.snake.append((self.x, self.y))
         self.snake = self.snake[-self.length:]
 
-        if self.isCollision():
+        if self.isCollision() or self.frame_iteration > 100 * self.length:
             reward = -10
             self.game_over = True
             return reward, self.game_over, self.score
 
-        if (self.snake[-1]) == self.apple:
-                self.length += 1
-                self.score += 1
-                reward = 10
-                self.apple = self.spawnApple(self.snake)
+        if self.snake[-1] == self.apple:
+            self.length += 1
+            self.score += 1
+            reward = 10
+            self.frame_iteration = 0
+            self.apple = self.spawnApple(self.snake)
 
         self.draw()
-        self.clock.tick(10)
+        self.clock.tick(20)
+
         return reward, self.game_over, self.score
-    
+
     def move(self, action):
         directions = ["RIGHT", "DOWN", "LEFT", "UP"]
         index = directions.index(self.direction)
@@ -92,13 +113,21 @@ class SnakeGameAI:
             return True
 
         return False
-    
+
     def draw(self):
         self.sc.fill(pygame.Color("black"))
 
         for i, j in self.snake:
-            pygame.draw.rect(self.sc, pygame.Color("green"), (i, j, SIZE, SIZE))
+            pygame.draw.rect(
+                self.sc,
+                pygame.Color("green"),
+                (i, j, SIZE, SIZE)
+            )
 
-        pygame.draw.rect(self.sc, pygame.Color("red"), (*self.apple, SIZE, SIZE))
+        pygame.draw.rect(
+            self.sc,
+            pygame.Color("red"),
+            (*self.apple, SIZE, SIZE)
+        )
 
         pygame.display.flip()
