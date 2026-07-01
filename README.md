@@ -4,14 +4,14 @@ SnakesInTheBoxAI is a Python Snake game controlled by an AI agent.
 
 The project is built for practicing game development, reinforcement learning, and basic AI training in Python.
 
-Features
-Classic Snake gameplay
-AI-controlled snake
-Reinforcement learning logic
-Score tracking
-Windows executable available in Releases
+# Features:
+  - Classic Snake gameplay
+  - AI-controlled snake
+  - Reinforcement learning logic
+  - Score tracking
+  - Windows executable available in Releases
 
-Tech Stack:
+# Tech Stack:
 
   - Python
   - PyGame
@@ -20,7 +20,7 @@ Tech Stack:
   - Reinforcement Learning
 
 
-Install dependencies:
+# Install dependencies:
 
 pip install -r requirements.txt
 
@@ -30,8 +30,8 @@ python agent.py
 
 Release
 
-Hotkeys:
+# Hotkeys:
 R for reset AI learning
 ESC for close tab
 
-You can download the ready-to-run Windows .exe version from the Releases section.
+# You can download the ready-to-run Windows .exe version from the Releases section.
