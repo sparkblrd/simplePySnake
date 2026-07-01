@@ -2,6 +2,7 @@ from random import randrange
 import pygame
 import ctypes
 import ctypes.wintypes
+import os
 
 CELL_NUMBER = 16
 SIZE = 10
@@ -20,6 +21,8 @@ class SnakeGameAI:
         self.clock = pygame.time.Clock()
 
         self.hwnd = pygame.display.get_wm_info()["window"]
+
+        self.reset_ai_requested = False
 
         self.reset()
 
@@ -57,6 +60,9 @@ class SnakeGameAI:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     quit()
+
+                if event.key == pygame.K_r:
+                    self.reset_ai_requested = True
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:

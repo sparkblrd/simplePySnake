@@ -1,3 +1,4 @@
+import os
 import random
 import torch
 from collections import deque
@@ -106,6 +107,24 @@ class Agent:
             final_move[move] = 1
 
         return final_move
+    
+    def reset_training(self):
+        checkpoint_path = "./model/checkpoint.pth"
+
+        if os.path.exists(checkpoint_path):
+            os.remove(checkpoint_path)
+            print("Checkpoint deleted.")
+
+        self.n_games = 0
+        self.epsilon = 0
+        self.record = 0
+
+        self.memory.clear()
+
+        self.model = LinearQNet(11, 256, 3)
+        self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
+
+        print("AI training reset.")
 
 
 def train():
@@ -118,6 +137,12 @@ def train():
         final_move = agent.get_action(state_old)
 
         reward, done, score = game.playStep(final_move)
+        
+        if game.reset_ai_requested:
+            agent.reset_training()
+            game.reset()
+            game.reset_ai_requested = False
+            continue
 
         state_new = agent.get_state(game)
 
@@ -159,6 +184,6 @@ def train():
                 "Record:", agent.record,
                 "Epsilon:", agent.epsilon
             )
-            
+
 if __name__ == "__main__":
     train()
